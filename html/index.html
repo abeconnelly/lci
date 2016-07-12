@@ -201,6 +201,17 @@ function sendreq_info() {
 }
 
 
+function sendreq_cgf() {
+  var txt = [
+    'var cgf_s = JSON.parse(lci_remote_req("cgf-server", "muduk_return(cgf_info, \'  \');"));',
+    'var resp = JSON.parse(cgf_s["cgf-server"][0]);',
+    '',
+    'lci_return(resp, "  ");'
+  ].join("\n");
+  var v = document.getElementById("text").value = txt;
+  sendreq();
+}
+
 function sendreq_z() {
   var txt = [
   ].join("\n");
@@ -244,6 +255,9 @@ function historic_req_inc() {
 
 		<div class="content">
       <a href='#' onclick='sendreq_info();' >example-info</a>
+      <br>
+
+      <a href='#' onclick='sendreq_cgf();' >example-remote-cgf</a>
       <br>
 
       <a href='#' onclick='clear_textarea();' >clear</a>

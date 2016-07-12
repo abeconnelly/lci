@@ -2,13 +2,11 @@ package main
 
 import "os"
 import "fmt"
-import "io"
-import "net/http"
-import "io/ioutil"
+//import "io"
+//import "net/http"
+//import "io/ioutil"
 
-import "strconv"
-
-
+//import "strconv"
 
 import "github.com/abeconnelly/sloppyjson"
 
@@ -18,6 +16,7 @@ type LCID struct {
 }
 
 
+/*
 func (lci *LCID) WebDefault(w http.ResponseWriter, req *http.Request) {
   body,err := ioutil.ReadAll(req.Body)
   if err != nil { io.WriteString(w, `{"value":"error"}`); return }
@@ -70,6 +69,7 @@ func (lci *LCID) StartSrv() {
   http.HandleFunc("/i", lci.WebInteractive)
   http.ListenAndServe(fmt.Sprintf(":%d", lci.Port), nil)
 }
+*/
 
 
 func main() {
@@ -110,7 +110,9 @@ func main() {
 
   //fmt.Printf(">> %v\n", config_json.O["tile-server"].L[0].S)
 
-  lci.StartSrv()
+  e = lci.StartSrv()
+  if e!=nil { panic(e) }
 
+  fmt.Printf("done\n")
 
 }
