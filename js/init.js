@@ -1,5 +1,14 @@
 print = ((typeof(print)==="undefined") ? console.log : print);
 
+function hexstr(x, sz) {
+  sz = ((typeof sz==="undefined")?0:sz);
+  var t = x.toString(16);
+  if (t.length < sz) {
+    t = Array(sz - t.length + 1).join("0") + t;
+  }
+  return t;
+}
+
 var lci_config =   {
   "tile-server" : [ "http://localhost:8081" ],
   "cgf-server" : [ "http://localhost:8082" ],

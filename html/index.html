@@ -180,6 +180,9 @@ function sendreq() {
       var str = "Request took " + (Math.abs(d_t)/1000).toString() + "s";
       document.getElementById("status_text").innerHTML = str;
 
+    } else {
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("status_text").innerHTML = "<div style='color:red;'>" + "error: " + xhr.statusText + "(" + xhr.status + ")</div>";
     }
   };
   xhr.open("POST", url, true);
@@ -207,6 +210,30 @@ function sendreq_cgf() {
     'var resp = JSON.parse(cgf_s["cgf-server"][0]);',
     '',
     'lci_return(resp, "  ");'
+  ].join("\n");
+  var v = document.getElementById("text").value = txt;
+  sendreq();
+}
+
+function sendreq_remote_status() {
+  var txt = [
+
+    'var resp = {}',
+    '',
+    'var cgf_s = JSON.parse(lci_remote_req("cgf-server", "muduk_return(muduk_info());"));',
+    'resp["cgf-server"] = JSON.parse(cgf_s["cgf-server"][0]);',
+    '',
+    'var glf_s = JSON.parse(lci_remote_req("tile-server", "glfd_return(info());"));',
+    'resp["tile-server"] = JSON.parse(glf_s["tile-server"][0]);',
+    '',
+    'var p7e_s = JSON.parse(lci_remote_req("phenotype-server", "pheno_return(pheno_status());"));',
+    'resp["phenotype-server"] = JSON.parse(p7e_s["phenotype-server"][0]);',
+    '',
+    'var v5t_s = JSON.parse(lci_remote_req("variant-server", "vard_return(status());"));',
+    'resp["variant-server"] = JSON.parse(v5t_s["variant-server"][0]);',
+    '',
+    'lci_return(resp, "  ");'
+
   ].join("\n");
   var v = document.getElementById("text").value = txt;
   sendreq();
@@ -258,6 +285,9 @@ function historic_req_inc() {
       <br>
 
       <a href='#' onclick='sendreq_cgf();' >example-remote-cgf</a>
+      <br>
+
+      <a href='#' onclick='sendreq_remote_status();' >example-remote-status</a>
       <br>
 
       <a href='#' onclick='clear_textarea();' >clear</a>

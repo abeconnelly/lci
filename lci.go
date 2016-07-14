@@ -76,10 +76,10 @@ func main() {
 
   sample_config := `
   {
-    "tile-server" : [ "http://localhost:8081" ],
+    "tile-server" : [ "http://localhost:8081/exec" ],
     "cgf-server" : [ "http://localhost:8082" ],
-    "annotation-server" : [ "http://localhost:8083" ],
-    "phenotype-server" : [ "http://localhost:8084" ],
+    "phenotype-server" : [ "http://localhost:8083" ],
+    "variant-server" : [ "http://localhost:8084" ],
     "version" : "0.1.0"
   }
   `;
@@ -94,7 +94,7 @@ func main() {
   lci.ServerList = make(map[string][]string)
   lci.Port = 8085
 
-  key_list := []string{ "tile-server", "cgf-server", "annotation-server", "phenotype-server" }
+  key_list := []string{ "tile-server", "cgf-server", "variant-server", "phenotype-server" }
   for idx:=0 ; idx<len(key_list); idx++ {
     key := key_list[idx]
     for i:=0; i<len(config_json.O[key].L) ; i++ {
