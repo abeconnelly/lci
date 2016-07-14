@@ -78,8 +78,8 @@ func main() {
   {
     "tile-server" : [ "http://localhost:8081/exec" ],
     "cgf-server" : [ "http://localhost:8082" ],
-    "phenotype-server" : [ "http://localhost:8083" ],
-    "variant-server" : [ "http://localhost:8084" ],
+    "phenotype-server" : [ "http://localhost:8083/exec" ],
+    "variant-server" : [ "http://localhost:8084/exec" ],
     "version" : "0.1.0"
   }
   `;
