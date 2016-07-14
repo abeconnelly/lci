@@ -1,0 +1,11 @@
+// Substitute the <<STRUCT>> for a string sequence of the tilepath structure
+// received from the CGF server.
+//
+
+var x = <<STRUCT>>;
+var seq = [[],[]];
+
+var q = {"tilepath":x.tilepath, "allele": x.allele, "loq_info":x.loq_info, "start_tilestep":x.start_tilestep};
+var r = tiletogvcf(JSON.stringify(q), false);
+
+glfd_return({"result":r});

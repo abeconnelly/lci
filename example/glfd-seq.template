@@ -1,0 +1,28 @@
+// Substitute the <<STRUCT>> for a string sequence of the tilepath structure
+// received from the CGF server.
+//
+
+var x = <<STRUCT>>;
+var seq = [[],[]];
+
+var allele = x.allele;
+var loq = x.loq_info;
+var tilepath = x.tilepath;
+var beg_step = x.start_tilestep;
+
+for (var i=0; i<allele[0].length; i++) {
+  if (allele[0][i] < 0) {
+    seq[0].push("");
+  } else {
+    seq[0].push(tilesequence(tilepath, 0, beg_step + i, allele[0][i]));
+  }
+
+  if (allele[1][i] < 0) {
+    seq[1].push("");
+  } else {
+    seq[1].push(tilesequence(tilepath, 0, beg_step + i, allele[1][i]));
+  }
+
+}
+
+glfd_return(seq);
