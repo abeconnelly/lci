@@ -171,9 +171,15 @@ var tile_s = JSON.parse(lci_remote_req("tile-server", tilelib_req));
 var res_s = tile_s["tile-server"][0];
 var res_json = JSON.parse(res_s);
 
+for (var key in res_json) {
+  res_json[key].human_id = huid;
+  res_json[key].dataset_id = dataset_id;
+  res_json[key].rsid = rsid;
+}
+
 // Finally, we get to see the sequence.
 // To sum up, this is the sequence for the participant that has blood
 // type AB+ and has had some type of sleep paralysis with the above RSID
 // from ClinVar.
 //
-lci_return(res_json);
+lci_return(res_json, "  ");

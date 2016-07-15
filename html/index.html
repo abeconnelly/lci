@@ -239,6 +239,16 @@ function sendreq_remote_status() {
   sendreq();
 }
 
+function sendreq_all() {
+  var client = new XMLHttpRequest();
+  client.open('GET', '/static/example-all.js');
+  client.onreadystatechange = function() {
+    var v = document.getElementById("text").value = client.responseText;
+    sendreq();
+  }
+  client.send();
+}
+
 function sendreq_z() {
   var txt = [
   ].join("\n");
@@ -288,6 +298,9 @@ function historic_req_inc() {
       <br>
 
       <a href='#' onclick='sendreq_remote_status();' >example-remote-status</a>
+      <br>
+
+      <a href='#' onclick='sendreq_all();' >example-all</a>
       <br>
 
       <a href='#' onclick='clear_textarea();' >clear</a>

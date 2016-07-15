@@ -55,10 +55,14 @@ func (lci *LCID) WebExec(w http.ResponseWriter, req *http.Request) {
 }
 
 func (lci *LCID) StartSrv() error {
+  //http.Handle("/", http.FileServer(http.Dir("./example")))
+  http.Handle("/static/",  http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+
   http.HandleFunc("/", lci.WebDefault)
   http.HandleFunc("/exec", lci.WebExec)
   http.HandleFunc("/about", lci.WebAbout)
   http.HandleFunc("/i", lci.WebInteractive)
+
 
   port_str := fmt.Sprintf("%d", lci.Port)
 
