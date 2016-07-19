@@ -37,6 +37,7 @@ var tilesrv_req = [
   '',
 
 
+  'var skip_tag = false;',
   'var ret_a = [];',
   'var tilestep = 0;',
   'while (tilestep < allele[0].length) {',
@@ -52,6 +53,7 @@ var tilesrv_req = [
   '  var beg_tilestep = tilestep;',
   '  tilestep++;',
   '',
+  '',
   '  while ((tilestep < allele[0].length) && ((allele[0][tilestep] < 0) || (allele[1][tilestep] < 0))) {',
   '    local_allele[0].push(allele[0][tilestep]);',
   '    local_allele[1].push(allele[1][tilestep]);',
@@ -60,9 +62,10 @@ var tilesrv_req = [
   '    tilestep++;',
   '  }',
   '',
-  '  var q = {"tilepath": tilepath, "allele": local_allele, "loq_info": local_loq_info, "start_tilestep": beg_tilestep };',
+  '  var q = {"tilepath": tilepath, "allele": local_allele, "loq_info": local_loq_info, "skip_tag_prefix":skip_tag, "start_tilestep": beg_tilestep };',
   '  var r = tiletogvcf(JSON.stringify(q), false);',
   '  ret_a.push(r);',
+  '  skip_tag = true;',
   '}',
   '',
   'glfd_return({"result":ret_a.join("")});',
