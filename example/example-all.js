@@ -1,10 +1,14 @@
-// This is an involved example that uses four of the servers (the phenotype
+// This example uses four of the servers (the phenotype
 // server, the variatn server, the compact genome server and the tile library
-// server).  A participant is discovered through the phenotype server with
-// some traits (blood type AB+ and some type of sleep paralysis).  A
-// variant is looked up in the ClinVar database with a particular RSID.
-// The sequence of the tile for the participant with that ClinVar variant
-// is then retreived and returned.
+// server).
+//  * A participant is discovered through the phenotype server with
+//    a trait criterea (blood type AB+ and some type of sleep paralysis).
+//  * A variant is looked up in the ClinVar database with a particular RSID.
+//  * The tile variant is looked up for the participant querying the cgf server.
+//  * The sequence of the tile variant is requested from the tile server.
+//
+// Though the example is synthetic, this should give a sense for how to use
+// all the different components to construct other non-trivial queries.
 //
 
 // Look up a participant with blood type 'AB +' and that has some type
