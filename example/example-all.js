@@ -134,25 +134,20 @@ lci_return(resp_json);
 
 var matched_variant = {};
 
-//var debug_s = {"ok":"ok", "a":[]};
-
 var allele = resp_json[tilepath_hex].allele;
 for (var aa=0; aa<allele.length; aa++) {
   var tileid_str = tilepath_hex + "." + "00" + "." + hexstr(tilestep_i, 4) + "." + hexstr(allele[aa][0], 3);
 
-  //debug_s.a.push(tileid_str);
-
   if (tileid_str in uniq_tileid) {
-
     matched_variant[tileid_str] = uniq_tileid[tileid_str];
-
   }
 }
 
 lci_return(matched_variant);
 
+// Lookup the tile sequence from the tile library
+//
 var matched_variant_str = JSON.stringify(matched_variant);
-
 var tilelib_req = [
 
   'var in_data = ' + matched_variant_str + ';',
