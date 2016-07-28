@@ -318,3 +318,162 @@ function api_tilevariant_id(assembly_pdh, tileid_md5) {
   //return lci_return(x_resp);
   return lci_return(match_resp);
 }
+
+//------------------------
+//------------------------
+//------------------------
+
+
+function api_callsets() {
+
+  var cgf_query = [
+
+    'var res = [];',
+    'for (var i=0; i<cgf_info.cgf.length; i++) {',
+    '  res.push(cgf_info.cgf[i].name);',
+    '',
+    '}',
+    'muduk_return(res);',
+
+    ''].join("\n");
+
+  var cgf_res_raw = JSON.parse(lci_remote_req("cgf-server", cgf_query));
+  var cgf_res = JSON.parse(cgf_res_raw["cgf-server"][0]);
+
+  return lci_return(cgf_res);
+}
+
+function api_callsets_id(callset_name) {
+
+  var cgf_query = [
+
+    'var callset_name = "' + callset_name + '";',
+    'var res = {};',
+    'for (var i=0; i<cgf_info.cgf.length; i++) {',
+    '  if (cgf_info.cgf[i].name == callset_name) {',
+    '    res["callset-name"] = callset_name;',
+    '    res["callset-locator"] = cgf_info.cgf[i].file;',
+    '    break;',
+    '  }',
+    '',
+    '}',
+    'muduk_return(res);',
+
+    ''].join("\n");
+
+  var cgf_res_raw = JSON.parse(lci_remote_req("cgf-server", cgf_query));
+  var cgf_res = JSON.parse(cgf_res_raw["cgf-server"][0]);
+
+  return lci_return(cgf_res);
+
+}
+
+function api_callsets_gvcf_header() {
+}
+
+function api_callsets_gvcf() {
+}
+
+function api_callsets_tilevariants(callset_name, tile_positions) {
+
+  var tile_parts = tile_positions.split(".");
+  var tilever = parseInt(tile_parts[0], 16);
+  var tilepath = parseInt(tile_parts[1], 16);
+  var tile_step_parts = tile_parts[2].split("-");
+  var tilestep = -1;
+  var n_tilestep = 1;
+
+  if (tile_step_parts.length==1) {
+    tilestep = parseInt(tile_step_parts[0], 16);
+
+  } else if (tile_step_parts.length==2) {
+
+    tilestep = parseInt(tile_step_parts[0], 16);
+    var end_tilestep = parseInt(tile_step_parts[1], 16);
+    n_tilestep = end_tilestep - tilestep;
+
+  } else {
+    return lci_return({"error":"invalid parameter: " + tile_positions});
+  }
+
+  if ((tilestep < 0) || (n_tilestep<1)) {
+    return lci_return({"error":"invalid tilestep or range: " + tile_positions});
+  }
+
+
+  var cgf_query = [
+
+    'var callset_name = "'+callset_name+'";',
+    'var tilepath = '+tilepath+';',
+    'var tilestep = '+tilestep+';',
+    'var n_tilestep = '+n_tilestep+';',
+    'var cgf_id = -1;',
+    'for (var i=0; i<cgf_info.cgf.length; i++) {',
+    '  if (cgf_info.cgf[i].name == callset_name) { cgf_id = cgf_info.cgf[i].id; break; }',
+    '}',
+    '',
+    'resp = {};',
+    'if (cgf_id>=0) {',
+    '  resp = muduk_tile_band(cgf_id, tilepath, tilestep, n_tilestep);',
+    '}',
+    '',
+    'muduk_return(resp);',
+
+    ''].join("\n");
+
+  var cgf_res_raw = JSON.parse(lci_remote_req("cgf-server", cgf_query));
+  var cgf_res = JSON.parse(cgf_res_raw["cgf-server"][0]);
+
+  var hextilepath = hexstr(tilepath, 4);
+
+  var callpos_info = cgf_res[hextilepath];
+
+  //return lci_return(callpos_info);
+
+  var glf_query = [
+
+    'var callset_name = "'+ callset_name  +'";',
+    'var tilever = 0;',
+    'var z = ' + JSON.stringify(callpos_info) + ';',
+    'var res = { "callset-name":callset_name, "tile-variants":[] };',
+    'var debug=[];',
+    'for (var aa=0; aa<z.allele.length; aa++) {',
+    '',
+    '  res["tile-variants"].push([]);',
+    '  var curstep = z.start_tilestep-1;',
+    '  var tilepath = z.tilepath;',
+    '',
+    '',
+    '  for (var i=0; i<z.allele[aa].length; i++) {',
+    '    curstep++;',
+    '',
+    '    if (z.allele[aa][i] < 0) { continue; }',
+    '',
+    '',
+    '    var qstr = JSON.stringify({"tile-path":tilepath, "tile-step":curstep, "tile-lib-version":tilever, "tile-variant-id":z.allele[aa][i], "loq-info":z.loq_info[aa][i]});',
+    '',
+    '    var fullseq = tilesequenceloq(qstr);',
+    '    var m5s = seqmd5sum(fullseq);',
+    '',
+    '    res["tile-variants"][aa].push(m5s);',
+    '  }',
+    '}',
+    'glfd_return(res);',
+
+  ''].join("\n")
+
+  var glf_res_raw = JSON.parse(lci_remote_req("tile-server", glf_query));
+  var glf_res = JSON.parse(glf_res_raw["tile-server"][0]);
+
+  return lci_return(glf_res);
+}
+
+function api_assemblies() {
+}
+
+function api_assemblies_id() {
+}
+
+
+
+

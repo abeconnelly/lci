@@ -149,6 +149,9 @@ func (lci *LCID) TileLibraryTagSetsTileVariantsLocus(w http.ResponseWriter, r *h
   lci.WebJSExec(w,r,api_str)
 }
 
+// This makes no sense, not implemented
+
+/*
 func (lci *LCID) TileLibraryTagSetsTileVariantsSubsequence(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
   fmt.Printf(">>>>>>>>>>>>>>>>>>>>>>>>>> %v\n", ps)
@@ -158,36 +161,82 @@ func (lci *LCID) TileLibraryTagSetsTileVariantsSubsequence(w http.ResponseWriter
   api_str := fmt.Sprintf("api_tilevariant_subsequence(%s);", strconv.Quote(tilevar_str))
   lci.WebJSExec(w,r,api_str)
 }
+*/
 
 //---------------------------
 
 func (lci *LCID) Callsets(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  fmt.Fprintf(w, "callsets")
   api_str := fmt.Sprintf("api_callsets();")
   lci.WebJSExec(w,r,api_str)
 }
 
 func (lci *LCID) CallsetsId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  fmt.Fprintf(w, "callsets")
-  api_str := fmt.Sprintf("api_callsets_id();")
+
+  callset_name := ps.ByName("callset")
+
+  api_str := fmt.Sprintf("api_callsets_id(%s);", strconv.Quote(callset_name))
   lci.WebJSExec(w,r,api_str)
 }
 
 func (lci *LCID) CallsetsGVCFHeader(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  fmt.Fprintf(w, "callsets")
-  api_str := fmt.Sprintf("api_callsets_gvcf_header();")
-  lci.WebJSExec(w,r,api_str)
+
+  callset_name := ps.ByName("callset") ; _ = callset_name
+  assembly_name := r.FormValue("assembly-name"); _ = assembly_name
+  assembly_pdh := r.FormValue("assembly-pdh") ; _ = assembly_pdh
+  //gvcf_block := r.FormValue("gvcf-block") ; _ = gvcf_block
+
+  header_str := fmt.Sprintf(` {
+    "fileformat":"VCFc4.2",
+    "source":"Lightningv%s",
+    "assembly":%s,
+    "info": [
+      {
+        "ID": "END",
+        "Number":1,
+        "Type":Integer,
+        "Description":"Stop position of the interval"
+      }
+    ],
+    "format": [
+      {
+        "ID": "GT",
+        "Number":1,
+        "Type":"String",
+        "Description":"Genotype"
+      }
+    ],
+    "alt": [
+      {
+        "ID": "NOT_REF",
+        "Description":"Represents any possible alternative allele at this location"
+      }
+    ]
+}`, LCI_VERSION, strconv.Quote(assembly_pdh))
+
+
+  //api_str := fmt.Sprintf("api_callsets_gvcf_header(%s);", strconv.Quote(assembly_pdh))
+  //lci.WebJSExec(w,r,api_str)
+  fmt.Fprintf(w, header_str)
 }
 
 func (lci *LCID) CallsetsGVCF(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  fmt.Fprintf(w, "callsets")
-  api_str := fmt.Sprintf("api_callsets_gvcf();")
+
+  callset_name := ps.ByName("callset") ; _ = callset_name
+  assembly_name := r.FormValue("assembly-name"); _ = assembly_name
+  assembly_pdh := r.FormValue("assembly-pdh") ; _ = assembly_pdh
+  //gvcf_block := r.FormValue("gvcf-block") ; _ = gvcf_block
+
+
+  api_str := fmt.Sprintf("api_callsets_gvcf(%s)", strconv.Quote(assembly_pdh))
   lci.WebJSExec(w,r,api_str)
 }
 
 func (lci *LCID) CallsetsTileVariants(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  fmt.Fprintf(w, "callsets")
-  api_str := fmt.Sprintf("api_callsets_tilevariants();")
+
+  callset_name := ps.ByName("callset") ; _ = callset_name
+  tile_positions := r.FormValue("tile-positions") ; _ = tile_positions
+
+  api_str := fmt.Sprintf("api_callsets_tilevariants(%s,%s);", strconv.Quote(callset_name), strconv.Quote(tile_positions))
   lci.WebJSExec(w,r,api_str)
 }
 
@@ -195,13 +244,13 @@ func (lci *LCID) CallsetsTileVariants(w http.ResponseWriter, r *http.Request, ps
 
 func (lci *LCID) Assemblies(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
   fmt.Fprintf(w, "assemblies")
-  api_str := fmt.Sprintf("api_assemblie();")
+  api_str := fmt.Sprintf("api_assemblies();")
   lci.WebJSExec(w,r,api_str)
 }
 
 func (lci *LCID) AssembliesId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
   fmt.Fprintf(w, "assemblies id")
-  api_str := fmt.Sprintf("api_assemblie_id();")
+  api_str := fmt.Sprintf("api_assemblies_id();")
   lci.WebJSExec(w,r,api_str)
 }
 
@@ -242,7 +291,7 @@ func (lci *LCID) StartSrvRouter() error {
   //router.GET("/tile-library/tag-sets/:tagset/tile-variants", )
   router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar", lci.TileLibraryTagSetsTileVariants)
   router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar/locus", lci.TileLibraryTagSetsTileVariantsLocus)
-  router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar/subsequence", lci.TileLibraryTagSetsTileVariantsSubsequence)
+  //router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar/subsequence", lci.TileLibraryTagSetsTileVariantsSubsequence)
 
   //router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar/annotations", )
 

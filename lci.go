@@ -6,6 +6,8 @@ import "io/ioutil"
 
 import "github.com/abeconnelly/sloppyjson"
 
+const LCI_VERSION string = "0.1.0"
+
 type LCID struct {
   ServerList map[string][]string
   Port int
