@@ -109,21 +109,101 @@ func (lci *LCID) TileLibraryTagSetsTilePositions(w http.ResponseWriter, r *http.
 }
 
 func (lci *LCID) TileLibraryTagSetsTilePositionsTilePosition(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-  fmt.Fprintf(w, "tile library tag sets paths tilepositions ... %v\n", ps.ByName("tilepos"))
+  //fmt.Fprintf(w, "tile library tag sets paths tilepositions ... %v\n", ps.ByName("tilepos"))
   tilepos_str := ps.ByName("tilepos")
-  api_str := fmt.Sprintf("api_tileposition_info(\"%s\");", tilepos_str)
+  api_str := fmt.Sprintf("api_tileposition_info(%s);", strconv.Quote(tilepos_str))
   lci.WebJSExec(w,r,api_str)
 }
 
 func (lci *LCID) TileLibraryTagSetsTilePositionsTilePositionLocus(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
   //fmt.Fprintf(w, "tile library tag sets paths tilepositions %v\n", ps.ByName("tilepos"))
-  fmt.Fprintf(w, "tile library tag sets paths tilepositions ... %v\n", ps.ByName("tilepos"))
+  //fmt.Fprintf(w, "tile library tag sets paths tilepositions ... %v\n", ps.ByName("tilepos"))
   tilepos_str := ps.ByName("tilepos")
-  api_str := fmt.Sprintf("api_tileposition_locus(\"%s\");", tilepos_str)
+  api_str := fmt.Sprintf("api_tileposition_locus(%s);", strconv.Quote(tilepos_str))
   lci.WebJSExec(w,r,api_str)
 }
 
 //---------------------------
+
+func (lci *LCID) TileLibraryTagSetsTileVariants(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  tilevar_str := ps.ByName("tilevar")
+  assembly_name := ps.ByName("assembly-name")
+  assembly_pdh := ps.ByName("assembly-pdh")
+
+  fmt.Fprintf(w, "tile library tag sets tilevariants tilvariantid ... %v %v (%v,%v)\n", ps.ByName("tagset"), ps.ByName("tilevar"), assembly_name, assembly_pdh)
+
+  //api_str := fmt.Sprintf("api_tilevariant_id(%s, %s, %s);", strconv.Quote(assembly_name), strconv.Quote(assembly_pdh), strconv.Quote(tilevar_str))
+  api_str := fmt.Sprintf("api_tilevariant_id(%s, %s);", strconv.Quote(assembly_pdh), strconv.Quote(tilevar_str))
+  lci.WebJSExec(w,r,api_str)
+}
+
+func (lci *LCID) TileLibraryTagSetsTileVariantsLocus(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+
+  tilevar_str := ps.ByName("tilevar")
+  assembly_name := r.FormValue("assembly-name"); _ = assembly_name
+  assembly_pdh := r.FormValue("assembly-pdh")
+
+  fmt.Fprintf(w, "tile library tag sets tilevariants locus ... %v %v %v\n", tilevar_str, assembly_name, assembly_pdh);
+
+  api_str := fmt.Sprintf("api_tilevariant_locus(%s,%s);", strconv.Quote(assembly_pdh), strconv.Quote(tilevar_str))
+  lci.WebJSExec(w,r,api_str)
+}
+
+func (lci *LCID) TileLibraryTagSetsTileVariantsSubsequence(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+
+  fmt.Printf(">>>>>>>>>>>>>>>>>>>>>>>>>> %v\n", ps)
+
+  fmt.Fprintf(w, "tile library tag sets tilevariants tilvariantid ... %v %v\n", ps.ByName("tagset"), ps.ByName("tilevar"))
+  tilevar_str := ps.ByName("tilevar")
+  api_str := fmt.Sprintf("api_tilevariant_subsequence(%s);", strconv.Quote(tilevar_str))
+  lci.WebJSExec(w,r,api_str)
+}
+
+//---------------------------
+
+func (lci *LCID) Callsets(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  fmt.Fprintf(w, "callsets")
+  api_str := fmt.Sprintf("api_callsets();")
+  lci.WebJSExec(w,r,api_str)
+}
+
+func (lci *LCID) CallsetsId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  fmt.Fprintf(w, "callsets")
+  api_str := fmt.Sprintf("api_callsets_id();")
+  lci.WebJSExec(w,r,api_str)
+}
+
+func (lci *LCID) CallsetsGVCFHeader(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  fmt.Fprintf(w, "callsets")
+  api_str := fmt.Sprintf("api_callsets_gvcf_header();")
+  lci.WebJSExec(w,r,api_str)
+}
+
+func (lci *LCID) CallsetsGVCF(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  fmt.Fprintf(w, "callsets")
+  api_str := fmt.Sprintf("api_callsets_gvcf();")
+  lci.WebJSExec(w,r,api_str)
+}
+
+func (lci *LCID) CallsetsTileVariants(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  fmt.Fprintf(w, "callsets")
+  api_str := fmt.Sprintf("api_callsets_tilevariants();")
+  lci.WebJSExec(w,r,api_str)
+}
+
+//---------------------------
+
+func (lci *LCID) Assemblies(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  fmt.Fprintf(w, "assemblies")
+  api_str := fmt.Sprintf("api_assemblie();")
+  lci.WebJSExec(w,r,api_str)
+}
+
+func (lci *LCID) AssembliesId(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+  fmt.Fprintf(w, "assemblies id")
+  api_str := fmt.Sprintf("api_assemblie_id();")
+  lci.WebJSExec(w,r,api_str)
+}
 
 
 
@@ -144,8 +224,6 @@ func (lci *LCID) StartSrvRouter() error {
   //http.HandleFunc("/about", lci.WebAbout)
   router.GET("/i", lci.WebInteractiveRouter)
 
-
-
   //router.GET("/", lci.WebDefault)
 
   router.GET("/", lci.Status)
@@ -161,27 +239,28 @@ func (lci *LCID) StartSrvRouter() error {
   router.GET("/tile-library/tag-sets/:tagset/tile-positions/:tilepos", lci.TileLibraryTagSetsTilePositionsTilePosition)
   router.GET("/tile-library/tag-sets/:tagset/tile-positions/:tilepos/locus", lci.TileLibraryTagSetsTilePositionsTilePositionLocus)
 
+  //router.GET("/tile-library/tag-sets/:tagset/tile-variants", )
+  router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar", lci.TileLibraryTagSetsTileVariants)
+  router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar/locus", lci.TileLibraryTagSetsTileVariantsLocus)
+  router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar/subsequence", lci.TileLibraryTagSetsTileVariantsSubsequence)
+
+  //router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar/annotations", )
+
+  //router.GET("/annotiles", )
+  //router.GET("/annotiles/:annotationid", )
+
+  router.GET("/callsets", lci.Callsets)
+  router.GET("/callsets/:callset", lci.CallsetsId )
+  router.GET("/callsets/:callset/gvcf-header", lci.CallsetsGVCFHeader )
+  router.GET("/callsets/:callset/gvcf", lci.CallsetsGVCF )
+  router.GET("/callsets/:callset/vcf-header", lci.CallsetsGVCFHeader )
+  router.GET("/callsets/:callset/vcf", lci.CallsetsGVCF )
+  router.GET("/callsets/:callset/tile-variants", lci.CallsetsTileVariants )
+
+  router.GET("/assemblies", lci.Assemblies)
+  router.GET("/assemblies/:assembly", lci.AssembliesId)
+
   /*
-  router.GET("/tile-library/tag-sets/:tagset/tile-variants", )
-  router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar", )
-  router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar/locus", )
-  router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar/subsequence", )
-  router.GET("/tile-library/tag-sets/:tagset/tile-variants/:tilevar/annotations", )
-
-  router.GET("/annotiles", )
-  router.GET("/annotiles/:annotationid", )
-
-  router.GET("/callsets", )
-  router.GET("/callsets/:callset", )
-  router.GET("/callsets/:callset/gvcf-header", )
-  router.GET("/callsets/:callset/gvcf", )
-  router.GET("/callsets/:callset/vcf-header", )
-  router.GET("/callsets/:callset/vcf", )
-  router.GET("/callsets/:callset/tile-variants", )
-
-  router.GET("/assemblies", )
-  router.GET("/assemblies/:assembly", )
-
   router.GET("/searches", )
   router.GET("/searches/help", )
   router.GET("/searches/:search", )

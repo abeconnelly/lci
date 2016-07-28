@@ -14,7 +14,13 @@ var lci_config =   {
   "cgf-server" : [ "http://localhost:8082" ],
   "annotation-server" : [ "http://localhost:8083" ],
   "phenotype-server" : [ "http://localhost:8084" ],
-  "version" : "0.1.0"
+  "version" : "0.1.0",
+  "assembly": {
+    "0" : "hg19",
+    "00" : "hg19",
+    "0000" : "hg19",
+    "x" : "GRCh38"
+  }
 }
 
 
@@ -144,3 +150,171 @@ function api_tileposition_locus(tilepos) {
   return lci_return(result_json);
 }
 
+function api_tilevariant_locus(assembly_pdh,tileid_md5) {
+
+  // assembly pdh igonored for now
+  //
+
+  var assembly_name = lci_config.assembly[assembly_pdh];
+
+  var tileid_parts = tileid_md5.split(".");
+  var tilever_s = tileid_parts[0];
+  var tilepath_s = tileid_parts[1];
+  var tilestep_s = tileid_parts[2];
+  var tilemd5_s = tileid_parts[3];
+
+  var tilever = parseInt(tilever_s, 16);
+  var tilepath = parseInt(tilepath_s, 16);
+  var tilestep = parseInt(tilestep_s, 16);
+
+  //var x = JSON.parse(api_tilevariant_id(tileid_md5));
+
+  var q = [
+    'var assembly_name = "'+assembly_name+'";',
+    'var assembly_pdh = "'+assembly_pdh+'";',
+    'var tilepath='+tilepath+';',
+    'var tilestep='+tilestep+';',
+    'var tilever='+tilever+';',
+    'var chrom = glfd_assembly_chrom(assembly_name, assembly_pdh, tilepath);',
+    'var end_pos = glfd_assembly_end_pos(assembly_name, assembly_pdh, tilepath, tilever, tilestep);',
+    '',
+    'var beg_pos = 0;',
+    'var tilepath_bef=tilepath; tilestep_bef=tilestep-1;',
+    'if (tilestep_bef > 0) {',
+    '  beg_pos = glfd_assembly_end_pos(assembly_name, assembly_pdh, tilepath_bef, tilever, tilestep_bef)-24;',
+    '} else {',
+    '  if (tilepath>0) {',
+    '    tilepath_bef=tilepath-1;',
+    '    var chrom_bef = glfd_assembly_chrom(assembly_name, assembly_pdh, tilepath_bef);',
+    '    if (chrom_bef == chrom) {',
+    '      tilestep_bef=glf_info.StepPerPath[tilepath_bef]-1;',
+    '      beg_pos = glfd_assembly_end_pos(assembly_name, assembly_pdh, tilepath_bef, tilever, tilestep_bef);',
+    '    }',
+    '  }',
+    '}',
+    '',
+    'glfd_return({ "chrom":chrom, "beg-pos":beg_pos, "end-pos":end_pos });',
+    ''].join("\n");
+
+  //return lci_return({"q":q});
+
+  var res_raw = JSON.parse(lci_remote_req("tile-server", q));
+  var res = JSON.parse(res_raw["tile-server"][0]);
+
+  return lci_return({"assembly-name":assembly_name, "assembly-pdh":assembly_pdh, "chromosome-name":res.chrom, "indexing":0, "start-position":res["beg-pos"], "end-position":res["end-pos"]});
+
+  //return lci_return({"ok":"ok","info":"locus placeholder"});
+}
+
+function api_tilevariant_id(assembly_pdh, tileid_md5) {
+
+  // assembly pdh effectively ignored
+  //
+
+  var tile_parts = tileid_md5.split(".");
+  var tilever  = tile_parts[0];
+  var tilepath = tile_parts[1];
+  var tilestep = tile_parts[2];
+  var tilemd5  = tile_parts[3];
+
+  var tilepath_int = parseInt(tilepath, 16);
+  var tilestep_int = parseInt(tilestep, 16);
+
+  var tilepath_hex_str = hexstr(tilepath_int, 4);
+
+  var cgf_query = [
+    'var res = [];',
+    'for (var idx=0; idx<cgf_info.cgf.length; idx++) {',
+    '  var res_ele = { "id" : idx, "name" : cgf_info.cgf[idx].name };',
+    '  var cgf_id = cgf_info.cgf[idx].id;',
+    '  var band = JSON.parse(muduk_tile_band(cgf_id, ' + tilepath_int + ', ' + tilestep_int + ', 1));',
+    '  var b = band["' + tilepath_hex_str + '"];',
+    '  res_ele["allele"] = b["allele"];',
+    '  res_ele["loq_info"] = b["loq_info"];',
+    '  res.push(res_ele);',
+    '}',
+    '',
+    'muduk_return(res);',
+   "" ].join("\n");
+
+  var cgf_res_raw = JSON.parse(lci_remote_req("cgf-server", cgf_query));
+  var cgf_res = JSON.parse(cgf_res_raw["cgf-server"][0]);
+
+
+  var match_resp =  {};
+  var x_resp = [];
+  var cur_match = 0;
+  for (var i=0; i<cgf_res.length; i++) {
+
+    var already_matched = false;
+
+    for (var j=0; j<cgf_res[i].allele.length; j++) {
+      var tilevarid = cgf_res[i].allele[j][0];
+      var f_opt0 = JSON.stringify({
+        "tile-path":parseInt(tilepath,16),
+        "tile-lib-version":parseInt(tilever,16),
+        "tile-step":parseInt(tilestep, 16),
+        "tile-variant-id":cgf_res[i].allele[j][0],
+        "loq-info":cgf_res[i].loq_info[j][0]
+      });
+
+      var f_opt1 = '0x'+tilepath+',0x'+tilever+',0x'+tilestep+',0x'+tilevarid+'';
+      var tile_lib_query = [
+        'var tilepath=0x'+tilepath+';',
+        'var tilestep=0x'+tilestep+';',
+        'var query_str = JSON.stringify(' + f_opt0 + ');',
+        'var seq_hiq = tilesequence('+f_opt1+');',
+        'var seq = tilesequenceloq(query_str);',
+        'var span = glfd_tilespan('+f_opt1+');',
+        'var m5str = seqmd5sum(seq);',
+        'var end_tag = false;',
+        'var beg_tag = false;',
+        'if ((tilestep + parseInt(span)) >= glf_info.StepPerPath[tilepath]) { end_tag = true; }',
+        'if (tilestep==0) { beg_tag = true; }',
+        'glfd_return({"seq":seq, "span":span, "md5sum":m5str, "end-tag":end_tag, "beg-tag":beg_tag, "seq-hiq":seq_hiq });',
+        '' ].join("\n");
+
+      var raw_resp = JSON.parse(lci_remote_req("tile-server", tile_lib_query));
+      var resp = JSON.parse(raw_resp["tile-server"][0]);
+
+      var cur_tot = cgf_res.length;
+
+      if (resp.md5sum == tilemd5) {
+        if (tilestep == 0)
+        if (!already_matched) { cur_match+=1; }
+        already_matched=true;
+        var tag_beg = "";
+        var tag_end = "";
+        if (!resp["beg-tag"]) { tag_beg = resp["seq-hiq"].slice(0,24); }
+        if (!resp["end-tag"]) {
+          var n = resp["seq-hiq"].length;
+          tag_end = resp["seq-hiq"].slice(n-24,n);
+        }
+
+        match_resp = {
+          "tile-variant-id": tilevarid,
+          "tile-variant" : tileid_md5,
+          "tag-length": 24,
+          "start-tag": tag_beg,
+          "end-tag": tag_end,
+          "is-start-of-path-tag": resp["beg-tag"],
+          "is-end-of-path-tag": resp["end-tag"],
+          "sequence": resp.seq,
+          "md5sum": resp.md5sum,
+          "length": resp.seq.length,
+          "number-of-positions-spanned":resp.span,
+          "population-frequency": cur_match / cur_tot,
+          "population-count":cur_match,
+          "population_total":cur_tot
+        };
+      }
+
+      x_resp.push(resp);
+
+    }
+  }
+
+  //return lci_return(cgf_res);
+  //return lci_return(x_resp);
+  return lci_return(match_resp);
+}
