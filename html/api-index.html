@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <!-- Bootstrap core CSS -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/css/dashboard.css" rel="stylesheet">
+  <script src="/static/js/jquery.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+
+  <script src="/static/js/l7g_query.js"></script>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Lightning Server</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <!--
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Profile</a></li>
+            -->
+            <li><a href="#">Help</a></li>
+          </ul>
+          <!--
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+          -->
+        </div>
+      </div>
+    </nav>
+
+
+    <div class="container-fluid">
+
+      <div class="row">
+
+        <div class="col-sm-3 col-md-2 sidebar">
+
+          <ul class="nav nav-sidebar" id="tabs" data-tabs="tabs">
+            <li class="active"><a href="#overview-tab" data-toggle="tab">Overview <span class="sr-only">(current)</span></a></li>
+            <br>
+            <li> <a  data-toggle="tab" href="#api-tab">API</a> </li>
+
+            <br>
+            <br>
+
+            <li><a  href="#status-tab" data-toggle="tab" >status</a></li>
+
+            <br>
+
+            <li><a  data-toggle="tab" href="#tile-library-tab">/tile-library</a></li>
+            <li><a  data-toggle="tab" href="#tile-library-tag-sets-tab">&nbsp; &nbsp; /tag-sets</a></li>
+            <li><a  data-toggle="tab" href="#tile-library-tag-sets-tagsetid-tab">&nbsp; &nbsp;&nbsp; &nbsp;/:tagset</a></li>
+            <li><a  data-toggle="tab" href="#tile-library-tag-sets-tagsetid-paths-tab">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;/paths</a></li>
+            <li><a  data-toggle="tab" href="#tile-library-tag-sets-tagsetid-paths-tilepathid-tab">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;/paths/:tilepath</a></li>
+
+            <li><a  data-toggle="tab" href="#tile-library-tag-sets-tagsetid-tile-positions-tab">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;/tile-positions</a></li>
+            <li><a  data-toggle="tab" href="#tile-library-tag-sets-tagsetid-tile-positions-tilepos-tab">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;/:tilepos</a></li>
+            <li><a  data-toggle="tab" href="#tile-library-tag-sets-tagsetid-tile-positions-tilepos-locus-tab">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;/:tilepos/locus</a></li>
+
+            <li><a  data-toggle="tab" href="#tile-library-tag-sets-tagsetid-tile-variants-tab">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;/tile-variants</a></li>
+            <li><a  data-toggle="tab" href="#tile-library-tag-sets-tagsetid-tile-variants-tilevar-tab">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;/:tilevar</a></li>
+
+            <li><a  data-toggle="tab" href="#callsets-tab">/callsets</a></li>
+            <li><a  data-toggle="tab" href="#callsets-callsetid-tab">&nbsp; &nbsp;/:callsetid</a></li>
+
+            <li><a  data-toggle="tab" href="#callsets-callsetid-gvcf-header-tab">&nbsp; &nbsp;&nbsp; &nbsp;/gvcf-header</a></li>
+            <li><a  data-toggle="tab" href="#callsets-callsetid-gvcf-tab">&nbsp; &nbsp;&nbsp; &nbsp;/gvcf</a></li>
+            <li><a  data-toggle="tab" href="#callsets-callsetid-tile-variants-tab">&nbsp; &nbsp;&nbsp; &nbsp;/tile-variants</a></li>
+
+          </ul>
+
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <div class='tab-content'>
+
+            <div class="tab-pane active" id="overview-tab">
+              <h1>Overview</h1>
+            </div>
+
+            <div class="tab-pane" id="api-tab">
+              <h1>API</h1>
+            </div>
+
+            <div class="tab-pane" id="status-tab">
+              <h2>status</h2>
+              <br>
+              <h4>CLI example:</h4>
+              <pre> curl $LIGHTNING_HOST/status </pre>
+              <button type='button' class='btn btn-primary' onclick='l7g_query("status");'>Send API Query</button>
+            </div>
+
+            <div class="tab-pane" id="tile-library-tab">
+              <h2>tile-library</h2>
+            </div>
+
+            <div class="tab-pane" id="tile-library-tag-sets-tab">
+              <h2>tile-library / tag-sets</h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre> curl $LIGHTNING_HOST/tile-library/tag-sets </pre>
+
+              <br>
+
+              <button type='button' class='btn btn-primary' onclick='l7g_query("tile-library/tag-sets");'>Send API Query</button>
+
+            </div>
+
+            <div class="tab-pane" id="tile-library-tag-sets-tagsetid-tab">
+              <h2>tile-library / tag-sets / :tagsetid</h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre> curl $LIGHTNING_HOST/tile-library/tag-sets/0000 </pre>
+              <br>
+
+              <button type='button' class='btn btn-primary' onclick='l7g_query("tile-library/tag-sets/0000");'>Send API Query</button>
+
+            </div>
+
+            <div class="tab-pane" id="tile-library-tag-sets-tagsetid-paths-tab">
+              <h2>tile-library / tag-sets / :tagsetid / paths</h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre> curl $LIGHTNING_HOST/tile-library/tag-sets/0000/paths </pre>
+
+              <br>
+              <button type='button' class='btn btn-primary' onclick='l7g_query("tile-library/tag-sets/0000/paths");'>Send API Query</button>
+
+
+            </div>
+
+            <div class="tab-pane" id="tile-library-tag-sets-tagsetid-paths-tilepathid-tab">
+              <h2>tile-library / tag-sets / :tagsetid / paths / :tilepathid</h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre id="tile-library-tag-sets-tagsetid-paths-tilepathid-pre"> curl $LIGHTNING_HOST/tile-library/tag-sets/0000/paths/01f </pre>
+
+              <div class='row'>
+
+                <div class='col-md-1'>
+                  Tile Path
+                </div>
+
+                <div class='col-md-2'>
+                  <input type='text' id='tile-library-tag-sets-tagsetid-paths-tilepathid-text' value='01f' onchange='tile_path_change();'>
+                </div>
+
+                <div class='col-md-9'>
+                </div>
+
+              </div>
+
+              <input type='hidden' id='tile-library-tag-sets-tagsetid-paths-tilepathid-id' value=''>
+              <input type='hidden' id='tile-library-tag-sets-tagsetid-paths-tilepathid-query' value=''>
+
+              <br>
+              <button type='button' class='btn btn-primary' onclick='tile_path_query();'>Send API Query</button>
+
+
+            </div>
+
+            <!-- tile-positions -->
+
+            <div class="tab-pane" id="tile-library-tag-sets-tagsetid-tile-positions-tab">
+              <h2>tile-library / tag-sets / :tagsetid / tile-positions </h2>
+
+              <!--
+              <br>
+              <h4>CLI example:</h4>
+              <pre> curl $LIGHTNING_HOST/tile-library/tag-sets/0000/tile-positions </pre>
+              <br>
+              <button type='button' class='btn btn-primary' onclick='l7g_query("tile-library/tag-sets/0000/tile-positions");'>Send API Query</button>
+              -->
+
+            </div>
+
+            <div class="tab-pane" id="tile-library-tag-sets-tagsetid-tile-positions-tilepos-tab">
+              <h2>tile-library / tag-sets / :tagsetid / tile-positions / :tilepos </h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre id='tile-library-tag-sets-tagsetid-tile-positions-tilepos-pre'> curl $LIGHTNING_HOST/tile-library/tag-sets/0000/tile-positions/00.247.0000 </pre>
+
+              <div class='row'>
+
+                <div class='col-md-1'>
+                  Tile Position
+                </div>
+
+                <div class='col-md-2'>
+                  <input type='text' id='tile-library-tag-sets-tagsetid-tile-positions-tilepos-text' value='00.247.0000' onchange='tile_pos_change();'>
+                </div>
+
+                <div class='col-md-9'></div>
+              </div>
+
+              <input type='hidden' id='tile-library-tag-sets-tagsetid-tile-positions-tilepos-id' value=''>
+              <input type='hidden' id='tile-library-tag-sets-tagsetid-tile-positions-tilepos-query' value=''>
+
+
+
+              <br>
+              <!-- <button type='button' class='btn btn-primary' onclick='l7g_query("tile-library/tag-sets/0000/tile-positions/00.247.0000");'>Send API Query</button> -->
+              <button type='button' class='btn btn-primary' onclick='tile_pos_query();'>Send API Query</button>
+
+            </div>
+
+            <!-- ... -->
+
+            <div class="tab-pane" id="tile-library-tag-sets-tagsetid-tile-positions-tilepos-locus-tab">
+              <h2>tile-library / tag-sets / :tagsetid / tile-positions / :tilepos / locus </h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre id='tile-library-tag-sets-tagsetid-tile-positions-tilepos-locus-pre'> curl $LIGHTNING_HOST/tile-library/tag-sets/0000/tile-positions/00.247.0000/locus </pre>
+
+              <div class='row'>
+
+                <div class='col-md-1'>
+                  Tile Position
+                </div>
+
+                <div class='col-md-2'>
+                  <input type='text' id='tile-library-tag-sets-tagsetid-tile-positions-tilepos-locus-text' value='00.247.0000' onchange='tile_pos_locus_change();'>
+                </div>
+
+                <div class='col-md-9'></div>
+              </div>
+
+              <input type='hidden' id='tile-library-tag-sets-tagsetid-tile-positions-tilepos-locus-id' value=''>
+              <input type='hidden' id='tile-library-tag-sets-tagsetid-tile-positions-tilepos-locus-query' value=''>
+
+              <br>
+              <button type='button' class='btn btn-primary' onclick='tile_pos_locus_query();'>Send API Query</button>
+
+            </div>
+
+            <!-- ... -->
+
+            <div class="tab-pane" id="tile-library-tag-sets-tagsetid-tile-variants-tab">
+              <h2>tile-library / tag-sets / :tagsetid / tile-variants </h2>
+
+              <!--
+              <br>
+              <h4>CLI example:</h4>
+              <pre> curl $LIGHTNING_HOST/tile-library/tag-sets/0000/tile-variants </pre>
+              <button type='button' class='btn btn-primary' onclick='l7g_query("tile-library/tag-sets/0000/tile-variants");'>Send API Query</button>
+              -->
+
+            </div>
+
+            <!-- ... -->
+
+            <div class="tab-pane" id="tile-library-tag-sets-tagsetid-tile-variants-tilevar-tab">
+              <h2>tile-library / tag-sets / :tagsetid / tile-variants / :tilevar </h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre id='tile-library-tag-sets-tagsetid-tile-variants-tilevar-pre'> curl $LIGHTNING_HOST/tile-library/tag-sets/0000/tile-variants/00.2c5.30ae.46b2e275f595c76ec0b81788d78c3397 </pre>
+
+
+              <div class='row'>
+
+                <div class='col-md-1'> Tile Position </div>
+
+                <div class='col-md-2'>
+                  <input type='text' id='tile-library-tag-sets-tagsetid-tile-variants-tilevar-text' value='00.2c5.30ae.46b2e275f595c76ec0b81788d78c3397' onchange='tile_var_change();'>
+                </div>
+
+                <div class='col-md-9'></div>
+              </div>
+
+              <input type='hidden' id='tile-library-tag-sets-tagsetid-tile-variants-tilevar-id' value=''>
+              <input type='hidden' id='tile-library-tag-sets-tagsetid-tile-variants-tilevar-query' value=''>
+
+              <br>
+              <!-- <button type='button' class='btn btn-primary' onclick='l7g_query("tile-library/tag-sets/0000/tile-variants/00.2c5.30ae.46b2e275f595c76ec0b81788d78c3397");'>Send API Query</button> -->
+              <button type='button' class='btn btn-primary' onclick='tile_var_query();'>Send API Query</button> 
+
+            </div>
+
+            <!-- callsets -->
+
+            <div class="tab-pane" id="callsets-tab">
+              <h2> callsets </h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre> curl $LIGHTNING_HOST/callsets </pre>
+              <button type='button' class='btn btn-primary' onclick='l7g_query("callsets");'>Send API Query</button>
+
+            </div>
+
+            <div class="tab-pane" id="callsets-callsetid-tab">
+              <h2> callsets / :callsetid </h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre id='callsets-callsetid-pre'> curl $LIGHTNING_HOST/callsets/hu826751-GS03052-DNA_B01 </pre>
+
+              <div class='dropdown'>
+                Callset ID: <button class='btn btn-default dropdown-toggle' type='button' id='callsets-callsetid-dropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>
+                  <span class='caret'></span>
+                </button>
+                <ul id='callsets-callsetid-dropdown-ul' class='dropdown-menu' aria-labelledby='callsets-callsetid-dropdown'>
+                </ul>
+              </div>
+              <br>
+
+              <input type='hidden' id='callsets-callsetid-id' value=''>
+              <input type='hidden' id='callsets-callsetid-query' value=''>
+
+              <button type='button' class='btn btn-primary' onclick='callsets_callsetid_query();'>Send API Query</button>
+
+            </div>
+
+            <!-- x -->
+
+            <div class="tab-pane" id="callsets-callsetid-gvcf-header-tab">
+              <h2> callsets / :callsetid / gvcf-header </h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre id='callsets-callsetid-gvcf-header-pre'> curl $LIGHTNING_HOST/callsets/hu826751-GS03052-DNA_B01/gvcf-header </pre>
+
+              <div class='dropdown'>
+                Callset ID: <button class='btn btn-default dropdown-toggle' type='button' id='callsets-callsetid-gvcf-header-dropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>
+                  <span class='caret'></span>
+                </button>
+                <ul id='callsets-callsetid-dropdown-gvcf-header-ul' class='dropdown-menu' aria-labelledby='callsets-callsetid-gvcf-header-dropdown'>
+                </ul>
+              </div>
+              <br>
+
+              <input type='hidden' id='callsets-callsetid-gvcf-header-id' value=''>
+              <input type='hidden' id='callsets-callsetid-gvcf-header-query' value=''>
+
+              <br>
+              <button type='button' class='btn btn-primary' onclick='callsets_callsetid_gvcf_header_query();'>Send API Query</button>
+
+            </div>
+
+            <!-- x -->
+
+            <div class="tab-pane" id="callsets-callsetid-gvcf-tab">
+              <h2> callsets / :callsetid / gvcf </h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre id='callsets-callsetid-gvcf-pre'> curl $LIGHTNING_HOST/callsets/hu826751-GS03052-DNA_B01/gvcf </pre>
+
+              <div class='dropdown'>
+                Callset ID: <button class='btn btn-default dropdown-toggle' type='button' id='callsets-callsetid-gvcf-dropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>
+                  <span class='caret'></span>
+                </button>
+                <ul id='callsets-callsetid-dropdown-gvcf-ul' class='dropdown-menu' aria-labelledby='callsets-callsetid-gvcf-dropdown'>
+                </ul>
+              </div>
+              <br>
+
+              <input type='hidden' id='callsets-callsetid-gvcf-id' value=''>
+              <input type='hidden' id='callsets-callsetid-gvcf-query' value=''>
+
+              <br>
+              <button type='button' class='btn btn-primary' onclick='callsets_callsetid_gvcf_query();'>Send API Query</button>
+
+            </div>
+
+            <!-- x -->
+
+            <div class="tab-pane" id="callsets-callsetid-tile-variants-tab">
+              <h2> callsets / :callsetid / tile-variants </h2>
+
+              <br>
+              <h4>CLI example:</h4>
+              <pre id='callsets-callsetid-tile-variants-pre'> curl $LIGHTNING_HOST/callsets/hu826751-GS03052-DNA_B01/tile-variants/00.2cf.120</pre>
+
+              <div class='dropdown'>
+                Callset ID <button class='btn btn-default dropdown-toggle' type='button' id='callsets-callsetid-tile-variants-dropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>
+                  <span class='caret'></span>
+                </button>
+                <ul id='callsets-callsetid-dropdown-tile-variants-ul' class='dropdown-menu' aria-labelledby='callsets-callsetid-tile-variants-dropdown'>
+                </ul>
+              </div>
+              <br>
+
+              <input type='hidden' id='callsets-callsetid-tile-variants-id' value=''>
+
+              <div class='row'>
+
+                <div class='col-md-1'>
+                  TilePos
+                </div>
+
+                <div class='col-md-2'>
+                  <input type='text' id='callsets-callsetid-tile-variants-tilepos-text' value='00.2cf.12' onchange='callsets_callsetid_tilevariant_tilepos_change();'>
+                </div>
+
+                <div class='col-md-9'>
+                </div>
+
+              </div>
+
+              <input type='hidden' id='callsets-callsetid-tile-variants-query' value=''>
+
+              <br>
+              <button type='button' class='btn btn-primary' onclick='callsets_callsetid_tile_variants_query();'>Send API Query</button>
+
+            </div>
+
+
+
+          </div> <!-- tab-content -->
+
+          <br> <br> <br>
+
+          <div id='api-response'>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <script>
+      init_api_frontend();
+    </script>
+
+</body>
+</html>

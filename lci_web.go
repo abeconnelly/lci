@@ -39,8 +39,18 @@ func (lci *LCID) WebInteractive(w http.ResponseWriter, req *http.Request) {
   io.WriteString(w, string(str))
 }
 
+func (lci *LCID) WebInteractiveAPI(w http.ResponseWriter, req *http.Request) {
+  str,e := ioutil.ReadFile("html/api-index.html")
+  if e!=nil { io.WriteString(w, "error") ; return }
+  io.WriteString(w, string(str))
+}
+
 func (lci *LCID) WebInteractiveRouter(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
   lci.WebInteractive(w, req)
+}
+
+func (lci *LCID) WebInteractiveRouterAPI(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+  lci.WebInteractiveAPI(w, req)
 }
 
 func (lci *LCID) WebJSExec(w http.ResponseWriter, req *http.Request, str_req string) {
@@ -127,10 +137,10 @@ func (lci *LCID) TileLibraryTagSetsTilePositionsTilePositionLocus(w http.Respons
 
 func (lci *LCID) TileLibraryTagSetsTileVariants(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
   tilevar_str := ps.ByName("tilevar")
-  assembly_name := ps.ByName("assembly-name")
-  assembly_pdh := ps.ByName("assembly-pdh")
+  assembly_name := ps.ByName("assembly-name") ; _ = assembly_name
+  assembly_pdh := ps.ByName("assembly-pdh") ; _ = assembly_pdh
 
-  fmt.Fprintf(w, "tile library tag sets tilevariants tilvariantid ... %v %v (%v,%v)\n", ps.ByName("tagset"), ps.ByName("tilevar"), assembly_name, assembly_pdh)
+  //fmt.Fprintf(w, "tile library tag sets tilevariants tilvariantid ... %v %v (%v,%v)\n", ps.ByName("tagset"), ps.ByName("tilevar"), assembly_name, assembly_pdh)
 
   //api_str := fmt.Sprintf("api_tilevariant_id(%s, %s, %s);", strconv.Quote(assembly_name), strconv.Quote(assembly_pdh), strconv.Quote(tilevar_str))
   api_str := fmt.Sprintf("api_tilevariant_id(%s, %s);", strconv.Quote(assembly_pdh), strconv.Quote(tilevar_str))
@@ -143,7 +153,7 @@ func (lci *LCID) TileLibraryTagSetsTileVariantsLocus(w http.ResponseWriter, r *h
   assembly_name := r.FormValue("assembly-name"); _ = assembly_name
   assembly_pdh := r.FormValue("assembly-pdh")
 
-  fmt.Fprintf(w, "tile library tag sets tilevariants locus ... %v %v %v\n", tilevar_str, assembly_name, assembly_pdh);
+  //fmt.Fprintf(w, "tile library tag sets tilevariants locus ... %v %v %v\n", tilevar_str, assembly_name, assembly_pdh);
 
   api_str := fmt.Sprintf("api_tilevariant_locus(%s,%s);", strconv.Quote(assembly_pdh), strconv.Quote(tilevar_str))
   lci.WebJSExec(w,r,api_str)
@@ -272,6 +282,7 @@ func (lci *LCID) StartSrvRouter() error {
   router.POST("/exec", lci.WebExecRouter)
   //http.HandleFunc("/about", lci.WebAbout)
   router.GET("/i", lci.WebInteractiveRouter)
+  router.GET("/i-api", lci.WebInteractiveRouterAPI)
 
   //router.GET("/", lci.WebDefault)
 
