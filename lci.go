@@ -1,5 +1,6 @@
 package main
 
+import "os"
 import "fmt"
 import "log"
 import "io/ioutil"
@@ -37,6 +38,10 @@ func (lci *LCID) LoadConfig(config_fn string) error {
 func main() {
 
   config_fn := "./lci-config.json"
+  if len(os.Args) > 1 {
+    config_fn = os.Args[1]
+  }
+
   lci := LCID{}
 
   e := lci.LoadConfig(config_fn)
