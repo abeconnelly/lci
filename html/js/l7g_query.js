@@ -428,4 +428,12 @@ function init_api_frontend() {
     }
   });
 
+  // update hiddne html elements (query, id).
+  //
+  tile_path_change();
+  tile_pos_change();
+  tile_var_change();
+  callsets_callsetid_tilevariant_tilepos_change();
+
+
 }
