@@ -275,8 +275,7 @@ func (lci *LCID) StartSrv() error {
 func (lci *LCID) StartSrvRouter() error {
   router := httprouter.New()
 
-  //http.Handle("/static/",  http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
-  router.ServeFiles("/static/*filepath", http.Dir("./static"))
+  router.ServeFiles("/static/*filepath", http.Dir( lci.StaticDir ))
 
   //http.HandleFunc("/", lci.WebDefault)
   router.POST("/exec", lci.WebExecRouter)
@@ -334,8 +333,8 @@ func (lci *LCID) StartSrvRouter() error {
 }
 
 func (lci *LCID) StartSrvSimple() error {
-  //http.Handle("/", http.FileServer(http.Dir("./example")))
-  http.Handle("/static/",  http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+  //http.Handle("/static/",  http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+  http.Handle("/static/",  http.StripPrefix("/static/", http.FileServer(http.Dir( lci.StaticDir ))))
 
   http.HandleFunc("/", lci.WebDefault)
   http.HandleFunc("/exec", lci.WebExec)

@@ -14,6 +14,7 @@ type LCID struct {
   Port int
   HTMLDir string
   JSDir string
+  StaticDir string
 }
 
 func (lci *LCID) LoadConfig(config_fn string) error {
@@ -27,6 +28,7 @@ func (lci *LCID) LoadConfig(config_fn string) error {
   lci.Port = int(config_json.O["port"].P)
   lci.HTMLDir = config_json.O["html-dir"].S
   lci.JSDir = config_json.O["js-dir"].S
+  lci.StaticDir = config_json.O["static-dir"].S
 
   key_list := []string{ "tile-server", "cgf-server", "variant-server", "phenotype-server" }
   for idx:=0 ; idx<len(key_list); idx++ {

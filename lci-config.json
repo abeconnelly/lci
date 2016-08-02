@@ -6,6 +6,7 @@
   "variant-server" : [ "http://localhost:8084/exec" ],
   "html-dir" : "html",
   "js-dir" : "js",
+  "static-dir" : "static",
   "version" : "0.1.0"
 }
 
