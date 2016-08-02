@@ -333,15 +333,12 @@ func (lci *LCID) StartSrvRouter() error {
 }
 
 func (lci *LCID) StartSrvSimple() error {
-  //http.Handle("/static/",  http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
   http.Handle("/static/",  http.StripPrefix("/static/", http.FileServer(http.Dir( lci.StaticDir ))))
 
   http.HandleFunc("/", lci.WebDefault)
   http.HandleFunc("/exec", lci.WebExec)
   http.HandleFunc("/about", lci.WebAbout)
   http.HandleFunc("/i", lci.WebInteractive)
-
-
 
   port_str := fmt.Sprintf("%d", lci.Port)
 
