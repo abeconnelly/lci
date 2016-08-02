@@ -28,19 +28,19 @@ func (lci *LCID) WebDefault(w http.ResponseWriter, req *http.Request) {
 }
 
 func (lci *LCID) WebAbout(w http.ResponseWriter, req *http.Request) {
-  str,e := ioutil.ReadFile("html/about.html")
+  str,e := ioutil.ReadFile( lci.HTMLDir + "/about.html")
   if e!=nil { io.WriteString(w, "error") ; return }
   io.WriteString(w, string(str))
 }
 
 func (lci *LCID) WebInteractive(w http.ResponseWriter, req *http.Request) {
-  str,e := ioutil.ReadFile("html/index.html")
+  str,e := ioutil.ReadFile( lci.HTMLDir + "/index.html")
   if e!=nil { io.WriteString(w, "error") ; return }
   io.WriteString(w, string(str))
 }
 
 func (lci *LCID) WebInteractiveAPI(w http.ResponseWriter, req *http.Request) {
-  str,e := ioutil.ReadFile("html/api-index.html")
+  str,e := ioutil.ReadFile( lci.HTMLDir + "/api-index.html")
   if e!=nil { io.WriteString(w, "error") ; return }
   io.WriteString(w, string(str))
 }

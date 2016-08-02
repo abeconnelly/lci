@@ -12,6 +12,8 @@ const LCI_VERSION string = "0.1.0"
 type LCID struct {
   ServerList map[string][]string
   Port int
+  HTMLDir string
+  JSDir string
 }
 
 func (lci *LCID) LoadConfig(config_fn string) error {
@@ -23,6 +25,8 @@ func (lci *LCID) LoadConfig(config_fn string) error {
 
   lci.ServerList = make(map[string][]string)
   lci.Port = int(config_json.O["port"].P)
+  lci.HTMLDir = config_json.O["html-dir"].S
+  lci.JSDir = config_json.O["js-dir"].S
 
   key_list := []string{ "tile-server", "cgf-server", "variant-server", "phenotype-server" }
   for idx:=0 ; idx<len(key_list); idx++ {

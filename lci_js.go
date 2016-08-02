@@ -114,7 +114,7 @@ func (lci *LCID) JSVMRun(src string) (rstr string, e error) {
 
   // Script environment
   //
-  init_js,err := ioutil.ReadFile("js/init.js")
+  init_js,err := ioutil.ReadFile( lci.JSDir + "/init.js")
   if err!=nil { e = err; return }
   js_vm.Run(init_js)
 

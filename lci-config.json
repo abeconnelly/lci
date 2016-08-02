@@ -4,6 +4,8 @@
   "cgf-server" : [ "http://localhost:8082" ],
   "phenotype-server" : [ "http://localhost:8083/exec" ],
   "variant-server" : [ "http://localhost:8084/exec" ],
+  "html-dir" : "html",
+  "js-dir" : "js",
   "version" : "0.1.0"
 }
 
