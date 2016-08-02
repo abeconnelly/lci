@@ -433,7 +433,7 @@ function init_api_frontend() {
   tile_path_change();
   tile_pos_change();
   tile_var_change();
+  tile_pos_locus_change();
   callsets_callsetid_tilevariant_tilepos_change();
-
 
 }
