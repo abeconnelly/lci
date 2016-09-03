@@ -158,11 +158,12 @@ var g_saved_req_pos = 0;
 var g_start_timer = new Date();
 var g_end_timer = new Date();
 
-var g_port = 8085;
+//var g_port = 8085;
 
 function sendreq() {
   var v = document.getElementById("text").value;
-  var url = "http://localhost:" + g_port.toString() + "/exec";
+  //var url = "http://localhost:" + g_port.toString() + "/exec";
+  var url = "exec";
 
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {

@@ -279,13 +279,21 @@ func (lci *LCID) StartSrvRouter() error {
 
   //http.HandleFunc("/", lci.WebDefault)
   router.POST("/exec", lci.WebExecRouter)
+  router.POST("/exec/", lci.WebExecRouter)
   //http.HandleFunc("/about", lci.WebAbout)
   router.GET("/i", lci.WebInteractiveRouter)
+  router.GET("/i/", lci.WebInteractiveRouter)
+
+  router.POST("/i", lci.WebInteractiveRouter)
+  router.POST("/i/", lci.WebInteractiveRouter)
+
   router.GET("/i-api", lci.WebInteractiveRouterAPI)
+  router.GET("/i-api/", lci.WebInteractiveRouterAPI)
 
   //router.GET("/", lci.WebDefault)
 
   router.GET("/", lci.Status)
+  router.POST("/", lci.Status)
   router.GET("/status", lci.Status)
 
   router.GET("/tile-library/tag-sets", lci.TileLibraryTagSets)
@@ -337,8 +345,11 @@ func (lci *LCID) StartSrvSimple() error {
 
   http.HandleFunc("/", lci.WebDefault)
   http.HandleFunc("/exec", lci.WebExec)
+  http.HandleFunc("/exec/", lci.WebExec)
   http.HandleFunc("/about", lci.WebAbout)
+  http.HandleFunc("/about/", lci.WebAbout)
   http.HandleFunc("/i", lci.WebInteractive)
+  http.HandleFunc("/i/", lci.WebInteractive)
 
   port_str := fmt.Sprintf("%d", lci.Port)
 
