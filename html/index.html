@@ -242,7 +242,7 @@ function sendreq_remote_status() {
 
 function sendreq_all() {
   var client = new XMLHttpRequest();
-  client.open('GET', '/static/example-all.js');
+  client.open('GET', 'static/example-all.js');
   client.onreadystatechange = function() {
     var v = document.getElementById("text").value = client.responseText;
     sendreq();
