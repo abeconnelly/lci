@@ -242,7 +242,15 @@ function sendreq_remote_status() {
 
 function sendreq_all() {
   var client = new XMLHttpRequest();
-  client.open('GET', 'static/example-all.js');
+
+  // Strip off trailing '/i#' and use the
+  // actual url as it appears in the browser for our
+  // relative fetch.
+  //
+  var base_url = window.location.href;
+  base_url = base_url.replace(/\/i#?$/, '');
+  client.open('GET', base_url + '/static/example-all.js');
+
   client.onreadystatechange = function() {
     var v = document.getElementById("text").value = client.responseText;
     sendreq();
